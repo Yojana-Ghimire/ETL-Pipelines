@@ -1,3 +1,4 @@
+
 import pandas as pd
 import requests
 from sqlalchemy import create_engine
@@ -11,6 +12,8 @@ def extract()-> dict:
     except Exception as e:
         print(f"Error fetching data: {e}")
         return {}
+ 
+    
 #Transform the Raw data
 def transform(data:dict)->pd.DataFrame:
     extracted_data={
