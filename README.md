@@ -13,8 +13,8 @@ This repository contains several end-to-end ETL projects where data is extracted
 | **daraz.py**          | Extracts product and sales data from Daraz (e-commerce), cleans and prepares it for sales insights.             | Python, Web Scraping, Pandas, PostgreSQL |
 | **movie\_ratings.py** | Pulls movie ratings data from APIs, transforms and stores it for analyzing viewer trends.                       | Python, API calls, Pandas, SQL           |
 | **twitter.py**        | Collects Twitter data using Tweepy API, performs cleaning and analysis, then loads it into a database.          | Python, Tweepy, Pandas, PostgreSQL       |
-| **AWS\_marvel\_data** | ETL pipeline for Marvel movie data using AWS Lambda and S3 to automate extraction, transformation, and storage.
-Further data analysis and visualization done using Power BI.| Python, AWS Lambda, AWS S3, Power BI   |
+| **AWS\_marvel\_data** | ETL pipeline for Marvel movie data using AWS Lambda and S3 to automate extraction, transformation, and storage. Further data analysis and visualization done using Power BI. | Python, AWS Lambda, AWS S3, Power BI |
+
 
 ---
 
