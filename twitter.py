@@ -3,10 +3,10 @@ import psycopg2
 from psycopg2 import Error
 
 # Twitter API credentials
-api_key = 'Wy3B5pg1OwdmCe1pS33Hf0HKD'
-api_secret_key = 'MlqqxOZ7yibM1i0HlaIAsepi5iY6kBVuw9Mz3RyWdOptR3p8FW'
-access_token = '1880790631477616641-DLnnvwNTuEBSI0jVZ24FMqHMVICizp'
-access_secret_token = 'uH0S0APRYkDMIBAcqWYgu7b7GS77WdesrPEAFLldfpwL9'
+api_key = ''
+api_secret_key = ''
+access_token = ''
+access_secret_token = ''
 
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler(api_key, api_secret_key)
