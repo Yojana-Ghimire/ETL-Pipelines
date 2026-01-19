@@ -1,11 +1,13 @@
-
-import pandas as pd
+import json
 import requests
-from sqlalchemy import create_engine
+import pandas as pd
+import boto3
+import os
+from datetime import datetime
 
 #extract data from API
 def extract()-> dict:
-    API_url= "https://api.weatherapi.com/v1/current.json?key=29515dc18dcd49f495115106251701&q=Nepal"
+    API_url= "https://api.weatherapi.com/v1/current.json?key={API_KEY}&q=Nepal"
     try:
         data=requests.get(API_url).json()
         return data
@@ -33,21 +35,49 @@ def transform(data:dict)->pd.DataFrame:
     print(df)
     return df
     
+    def lambda_handler(event, context):
+    data = extract()
 
-#Load data into PostgresSQL database
-def load(df:pd.DataFrame)->None:
-    engine=create_engine("postgresql+psycopg2://postgres:python@localhost:5432/mydatabase") 
-    try:
-        df.to_sql("weather_project",engine, if_exists='replace',index=False)
-        print("Data successfully loaded into PostgresSQL!")
-    except Exception as e:
-        print(f"An error occured while loading the data{e}")
-    finally:
-        engine.dispose()
+    if not data:
+        return {
+            "statusCode": 500,
+            "body": "Weather data extraction failed"
+        }
+
+    transformed_df = transform(data)
+    load(data, transformed_df)
+
+    return {
+        "statusCode": 200,
+        "body": "Serverless weather data pipeline executed successfully"
+    }
+    
+
+#Load data into S3
+
+def load(raw_data: dict, df: pd.DataFrame) -> None:
+    timestamp = datetime.utcnow()
+    date_path = timestamp.strftime("%Y/%m/%d/%H%M%S")
+
+    # Store raw json
+    raw_key = f"raw/weather_{date_path}.json"
+    s3.put_object(
+        Bucket=BUCKET_NAME,
+        Key=raw_key,
+        Body=json.dumps(raw_data),
+        ContentType="application/json"
+    )
+
+    # Store transformed CSV 
+    processed_key = f"processed/weather_{date_path}.csv"
+    csv_data = df.to_csv(index=False)
+
+    s3.put_object(
+        Bucket=BUCKET_NAME,
+        Key=processed_key,
+        Body=csv_data,
+        ContentType="text/csv"
+    )
+
+    print("Raw and transformed weather data successfully stored in S3")
         
-        
-#Main ETL pipeline
-if __name__== "__main__":
-    data=extract()
-    transformed_data=transform(data)
-    load(transformed_data)
